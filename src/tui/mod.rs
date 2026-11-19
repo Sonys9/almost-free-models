@@ -2,6 +2,8 @@ use crossterm::event::EventStream;
 use rat_widget::list::{ListState, selection::RowSelection};
 use ratatui::{DefaultTerminal, style::Color, text::Text, widgets::Padding};
 
+use crate::locales::locale;
+
 mod basics;
 mod render;
 mod sidebar;
@@ -52,7 +54,7 @@ pub enum Page {
 impl Page {
     pub(crate) fn as_str(&self) -> &'static str {
         match self {
-            Page::Main => " Main page ",
+            Page::Main => locale().main_page,
         }
     }
 }

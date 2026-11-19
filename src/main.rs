@@ -1,14 +1,13 @@
-use crate::tui::App;
+use crate::{locales::Language, tui::App};
 
 mod tui;
+mod locales;
 
 #[tokio::main]
 async fn main() {
+    Language::update();
     let mut app = App::new();
     let result = app.run(ratatui::init()).await;
     ratatui::restore();
-    result.unwrap();
+    result.expect("The app exited unsuccessfuly");
 }
-
-// let filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info"));
-// tracing_subscriber::fmt().with_env_filter(filter).init();

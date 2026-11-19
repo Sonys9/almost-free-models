@@ -4,6 +4,10 @@ use rat_widget::list::List;
 use crate::tui::{App, BG_COLOR, FG_COLOR, LIST_CHOOSEN_COLOR, PADDING};
 
 impl App {
+    pub fn text<'a>(text: &'a str) -> Text<'a> {
+        Text::from(text)
+    }
+
     pub fn base() -> Block<'static> {
         Block::default()
             .padding(PADDING)

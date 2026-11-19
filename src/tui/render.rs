@@ -3,7 +3,7 @@ use futures::StreamExt;
 use rat_widget::event::{HandleEvent, Outcome, Regular};
 use ratatui::{Frame, layout::{Constraint, Layout}, widgets::StatefulWidget};
 
-use crate::tui::{App, Page};
+use crate::{locales::locale, tui::{App, Page}};
 
 impl App {
     pub(crate) async fn frame(&mut self) -> eyre::Result<()> {
@@ -35,8 +35,8 @@ impl App {
     
     pub(crate) fn render(&mut self, frame: &mut Frame) {
         let base = Self::block()
-            .title_top(" Almost Free Models ")
-            .title_bottom(" Ctrl + C to quit ");
+            .title_top(locale().app_name)
+            .title_bottom(locale().quit_hint);
         let base_inner = base.inner(frame.area());
         frame.render_widget(base, frame.area());
 

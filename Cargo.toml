@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+confy = "2.0.0"
 crossterm = { version = "0.29.0", features = ["event-stream"] }
 eyre = "0.6.14"
 futures = "0.3.34"

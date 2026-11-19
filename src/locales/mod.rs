@@ -1,6 +1,8 @@
 use std::sync::atomic::{AtomicU8, Ordering};
 
-use crate::locales::en::EN;
+use serde::{Deserialize, Serialize, de::Visitor};
+
+use crate::{config::Config, locales::en::EN};
 
 macro_rules! locales {
     ($($key:ident),* $(,)? ) => {
@@ -11,16 +13,22 @@ macro_rules! locales {
 }
 
 locales!(
-    main_page, app_name,
-    
-    quit_hint, sidebar_swipe_hint,
+    main_page,
+    app_name,
+    app_name_with_spaces,
+    config_path,
+    quit_hint,
+    sidebar_swipe_hint,
+    test_page,
 );
 
 static LANGUAGE: AtomicU8 = AtomicU8::new(Language::En as u8);
 
 pub mod en;
 
+#[derive(Default, Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Language {
+    #[default]
     En = 0,
 }
 
@@ -30,25 +38,36 @@ impl TryFrom<u8> for Language {
     fn try_from(id: u8) -> Result<Self, !> {
         Ok(match id {
             0 => Language::En,
-            _ => unreachable!()
+            _ => unreachable!(),
         })
     }
 }
 
+impl From<&str> for Language {
+    fn from(lang: &str) -> Self {
+        match lang {
+            _ => Language::En,
+        }
+    }
+}
+
 pub fn locale() -> &'static Locale {
-    Language::try_from(LANGUAGE.load(Ordering::Relaxed)).unwrap().locale()
+    Language::try_from(LANGUAGE.load(Ordering::Relaxed))
+        .unwrap()
+        .locale()
 }
 
 impl Language {
     /// Should detect user's default Language
     /// If there's a config it should use it
-    pub fn update() {
-        // config is not implemented yet
-        let language = match std::env::var("LANG").unwrap_or_else(|_| "en".to_string()) {
-            // If the app isn't localised for some language it will
-            // fallback to English (and if it's an English it will still fallback to English)
-            _ => Language::En,
-        };
+    pub fn update(config: &Config) {
+        let language: Language = config.language.unwrap_or_else(|| {
+            std::env::var("LANG")
+                .unwrap_or_else(|_| "en".to_string())
+                .to_lowercase()
+                .as_str()
+                .into()
+        });
         let language_id = language as u8;
         LANGUAGE.store(language_id, Ordering::Relaxed);
     }
@@ -56,7 +75,49 @@ impl Language {
     /// Get locale (Locale) by language
     pub fn locale(&self) -> &'static Locale {
         match self {
-            _ => &EN
+            _ => &EN,
         }
+    }
+
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            // If the app isn't localised for some language it will
+            // fallback to English (and if it's an English it will still fallback to English)
+            Language::En => "en",
+        }
+    }
+}
+
+struct LangVisitor;
+impl<'de> Visitor<'de> for LangVisitor {
+    type Value = Language;
+
+    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
+        formatter.write_str("a string with language code")
+    }
+
+    fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
+    where
+        E: serde::de::Error,
+    {
+        Ok(v.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Language {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        deserializer.deserialize_str(LangVisitor)
+    }
+}
+
+impl Serialize for Language {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.as_str())
     }
 }

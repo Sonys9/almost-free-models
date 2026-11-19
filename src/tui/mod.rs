@@ -2,12 +2,12 @@ use crossterm::event::EventStream;
 use rat_widget::list::{ListState, selection::RowSelection};
 use ratatui::{DefaultTerminal, style::Color, text::Text, widgets::Padding};
 
-use crate::locales::locale;
+use crate::{config::Config, locales::locale};
 
 mod basics;
+mod pages;
 mod render;
 mod sidebar;
-mod pages;
 
 const PADDING: Padding = Padding::new(1, 1, 0, 0);
 const BG_COLOR: Color = Color::Rgb(22, 29, 36);
@@ -18,6 +18,7 @@ pub struct App {
     pub reader: EventStream,
     state: AppState,
     should_break: bool,
+    config: Config,
 }
 
 pub struct AppState {
@@ -27,34 +28,43 @@ pub struct AppState {
 }
 
 impl App {
-    pub fn new() -> Self {
+    pub fn new(config: Config) -> Self {
         let mut state = AppState {
             list_state: ListState::default(),
-            list_items: &[Page::Main],
+            list_items: &[Page::Main, Page::TestPage],
             current_page: Page::Main,
         };
         state.list_state.focus.set(true);
         state.list_state.select(Some(0));
-        Self { reader: EventStream::new(), state, should_break: false }
+        Self {
+            reader: EventStream::new(),
+            state,
+            should_break: false,
+            config,
+        }
     }
-    
+
     pub async fn run(&mut self, mut terminal: DefaultTerminal) -> eyre::Result<()> {
         loop {
             terminal.draw(|frame| self.render(frame))?;
             self.frame().await?;
-            if self.should_break { break Ok(()) };
+            if self.should_break {
+                break Ok(());
+            };
         }
     }
 }
 
 pub enum Page {
     Main,
+    TestPage
 }
 
 impl Page {
     pub(crate) fn as_str(&self) -> &'static str {
         match self {
             Page::Main => locale().main_page,
+            Page::TestPage => locale().test_page,
         }
     }
 }
@@ -75,7 +85,8 @@ impl From<usize> for Page {
     fn from(value: usize) -> Self {
         match value {
             0 => Page::Main,
-            _ => unreachable!()
+            1 => Page::TestPage,
+            _ => unreachable!(),
         }
     }
 }

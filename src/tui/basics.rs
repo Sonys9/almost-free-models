@@ -1,11 +1,13 @@
-use ratatui::{style::Style, text::Text, widgets::{Block, BorderType, Borders}};
 use rat_widget::list::List;
+use ratatui::{
+    style::Style, text::Text, widgets::{Block, BorderType, Borders, Paragraph, Wrap},
+};
 
 use crate::tui::{App, BG_COLOR, FG_COLOR, LIST_CHOOSEN_COLOR, PADDING};
 
 impl App {
-    pub fn text<'a>(text: &'a str) -> Text<'a> {
-        Text::from(text)
+    pub fn text<'a>(text: &'a str) -> Paragraph<'a> {
+        Paragraph::new(text).wrap(Wrap { trim: true })
     }
 
     pub fn base() -> Block<'static> {

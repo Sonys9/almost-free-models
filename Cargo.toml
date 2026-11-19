@@ -11,6 +11,7 @@ futures = "0.3.34"
 rat-focus = "2.2.1"
 rat-widget = "3.3.2"
 ratatui = "0.30.2"
+serde = { version = "1.0.229", features = ["derive"] }
 tokio = { version = "1.54.1", features = ["full"] }
 tracing = "0.1.44"
 tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }

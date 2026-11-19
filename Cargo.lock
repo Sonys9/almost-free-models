@@ -43,6 +43,7 @@ dependencies = [
  "rat-focus",
  "rat-widget",
  "ratatui",
+ "serde",
  "tokio",
  "tracing",
  "tracing-subscriber",

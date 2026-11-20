@@ -8,4 +8,5 @@ locales!(locale RU(
     config_path: "Путь файла конфигурации: ",
     test_page: "Тестовая страница",
     locales_page: "Язык",
+    config_saves_hint: "Автоматически сохраняется в конфиг",
 ));

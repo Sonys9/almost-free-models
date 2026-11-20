@@ -44,6 +44,8 @@ locales!(
         sidebar_swipe_hint,
         test_page,
         locales_page,
+        config_saves_hint,
+        preview_text,
     )
 );
 
@@ -104,7 +106,7 @@ impl Language {
             Language::En => &EN
         }
     }
-    
+
     /// Updates LANGUAGE to the new language
     pub fn set(language: Language) {
         LANGUAGE.store(language as u8, Ordering::Relaxed);

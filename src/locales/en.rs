@@ -8,4 +8,5 @@ locales!(locale EN(
     config_path: "Configuration file path: ",
     test_page: "Test page",
     locales_page: "Locales",
+    config_saves_hint: "Automaticly saves to the config",
 ));

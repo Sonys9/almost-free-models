@@ -1,6 +1,4 @@
-use crossterm::event::{Event, KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
 use futures::StreamExt;
-use rat_widget::event::{ChoiceOutcome, HandleEvent, Outcome, Popup, Regular};
 use ratatui::{
     Frame,
     layout::{Constraint, Layout},
@@ -8,7 +6,7 @@ use ratatui::{
 };
 
 use crate::{
-    locales::{Language, locale}, tui::{App, Page},
+    locales::locale, tui::{App, Page},
 };
 
 impl App {

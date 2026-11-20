@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 use serde::{Deserialize, Serialize};
-use tokio::{fs::{self, File, OpenOptions}, io::AsyncWriteExt};
+use tokio::{fs::OpenOptions, io::AsyncWriteExt};
 
 use crate::locales::Language;
 

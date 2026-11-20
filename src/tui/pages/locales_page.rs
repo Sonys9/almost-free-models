@@ -11,18 +11,20 @@ impl App {
         let base_inner = base.inner(area);
         frame.render_widget(base, area);
 
-        let positions = Layout::vertical([
-            Constraint::Length(1); 2
-        ]).split(base_inner);
+        let [choice_col, _] = Layout::horizontal([
+            Constraint::Length(15),
+            Constraint::Min(0),
+        ])
+        .areas(base_inner);
 
-        let (choice, popup) = Choice::new()
-            .items([
-                (Language::En, "English"),
-                (Language::Ru, "Русский"),
-            ])
-            .into_widgets();
+        let [choice_area, _] = Layout::vertical([
+            Constraint::Length(1),
+            Constraint::Min(0),
+        ])
+        .areas(choice_col);
 
-        frame.render_stateful_widget(choice, positions[0], &mut self.state.locale_state);
-        frame.render_stateful_widget(popup, positions[1], &mut self.state.locale_state);
+        let (choice, popup) = Self::dropbox(self.state.locales);
+        frame.render_stateful_widget(choice, choice_area, &mut self.state.locale_state);
+        frame.render_stateful_widget(popup, base_inner, &mut self.state.locale_state);
     }
 }

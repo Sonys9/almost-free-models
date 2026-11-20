@@ -6,7 +6,7 @@
 
 use std::sync::atomic::{AtomicU8, Ordering};
 
-use serde::{Deserialize, Serialize, de::Visitor};
+use serde::{Deserialize, Serialize};
 
 use crate::{config::Config, locales::en::EN, locales::ru::RU};
 
@@ -104,16 +104,7 @@ impl Language {
             Language::En => &EN
         }
     }
-
-    pub fn as_str(&self) -> &'static str {
-        match self {
-            // If the app isn't localised for some language it will
-            // fallback to English (and if it's an English it will still fallback to English)
-            Language::En => "en",
-            Language::Ru => "ru",
-        }
-    }
-
+    
     /// Updates LANGUAGE to the new language
     pub fn set(language: Language) {
         LANGUAGE.store(language as u8, Ordering::Relaxed);

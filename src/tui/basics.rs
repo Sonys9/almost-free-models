@@ -1,6 +1,6 @@
-use rat_widget::list::List;
+use rat_widget::{choice::{Choice, ChoicePopup, ChoiceWidget}, list::List};
 use ratatui::{
-    style::Style, text::Text, widgets::{Block, BorderType, Borders, Paragraph, Wrap},
+    style::Style, text::{Line, Text}, widgets::{Block, BorderType, Borders, Paragraph, Wrap},
 };
 
 use crate::tui::{App, BG_COLOR, FG_COLOR, LIST_CHOOSEN_COLOR, PADDING};
@@ -34,5 +34,20 @@ impl App {
             .select_style(Style::new().bg(BG_COLOR).fg(LIST_CHOOSEN_COLOR).bold())
             .focus_style(Style::new().bg(BG_COLOR).fg(LIST_CHOOSEN_COLOR).bold())
             .highlight_symbol("•")
+    }
+
+    pub fn dropbox<'a, T, V>(items: impl IntoIterator<Item = &'a (T, V)>) -> (ChoiceWidget<'a, T>, ChoicePopup<'a, T>)
+    where
+        V: Into<Line<'a>> + 'a + Copy,
+        T: PartialEq + Clone + Default + 'a + Copy,
+    {
+        Choice::new()
+            .items(items.into_iter().copied())
+            .style(Style::new().bg(BG_COLOR).fg(FG_COLOR))
+            .select_style(Style::new().bg(BG_COLOR).fg(LIST_CHOOSEN_COLOR).bold())
+            .focus_style(Style::new().bg(BG_COLOR).fg(LIST_CHOOSEN_COLOR).bold())
+            .popup_style(Style::new().bg(BG_COLOR).fg(FG_COLOR).bold())
+            .popup_block(Self::block())
+            .into_widgets()
     }
 }

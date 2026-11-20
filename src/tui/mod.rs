@@ -27,6 +27,7 @@ pub struct AppState {
     list_items: &'static [Page],
     current_page: Page,
     locale_state: ChoiceState<Language>,
+    locales: &'static [(Language, &'static str)]
 }
 
 impl App {
@@ -36,6 +37,10 @@ impl App {
             list_items: &[Page::Main, Page::TestPage, Page::Locales],
             current_page: Page::Main,
             locale_state: ChoiceState::default(),
+            locales: &[
+                (Language::En, "English"),
+                (Language::Ru, "Русский"),
+            ]
         };
         state.list_state.focus.set(true);
         state.list_state.select(Some(0));

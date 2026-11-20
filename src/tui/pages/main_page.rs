@@ -17,7 +17,7 @@ impl App {
 
         frame.render_widget(
             //Self::text(concat!("Almost Free Models, v", env!("CARGO_PKG_VERSION"))),
-            Self::text(&format!(
+            Self::text(format!(
                 "{}, v{}",
                 locale().app_name,
                 env!("CARGO_PKG_VERSION")
@@ -26,7 +26,7 @@ impl App {
         );
         frame.render_widget(Self::text(locale().sidebar_swipe_hint), positions[1]);
         frame.render_widget(
-            Self::text(&format!(
+            Self::text(format!(
                 "{}{}",
                 locale().config_path,
                 self.config

@@ -63,8 +63,8 @@ pub enum Page {
 impl Page {
     pub(crate) fn as_str(&self) -> &'static str {
         match self {
-            Page::Main => locale().main_page,
-            Page::TestPage => locale().test_page,
+            Page::Main => locale().main_page_with_spaces,
+            Page::TestPage => locale().test_page_with_spaces,
         }
     }
 }

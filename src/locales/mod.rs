@@ -1,3 +1,9 @@
+/// Locales
+/// 
+/// You can make your own locales by using locales!(locale LANGUAGE(..))
+///
+/// It automaticly creates <name>_with_spaces fields (example: "Main menu" -> " Main menu ")
+
 use std::sync::atomic::{AtomicU8, Ordering};
 
 use serde::{Deserialize, Serialize, de::Visitor};
@@ -5,21 +11,39 @@ use serde::{Deserialize, Serialize, de::Visitor};
 use crate::{config::Config, locales::en::EN};
 
 macro_rules! locales {
-    ($($key:ident),* $(,)? ) => {
-        pub struct Locale {
-            $(pub $key: &'static str,)*
+    (keys ($($key:ident),* $(,)? )) => {
+        paste::paste! {
+            #[allow(dead_code)]
+            pub struct Locale {
+                $(
+                    pub $key: &'static str,
+                    pub [<$key _with_spaces>]: &'static str,
+                )*
+            }
+        }
+    };
+
+    (locale $name:ident ( $($key:ident : $val:expr),* $(,)? )) => {
+        paste::paste! {
+            pub const $name: Locale = Locale {
+                $(
+                    $key: $val,
+                    [<$key _with_spaces>]: concat!(" ", $val, " "),
+                )*
+            };
         }
     };
 }
 
 locales!(
-    main_page,
-    app_name,
-    app_name_with_spaces,
-    config_path,
-    quit_hint,
-    sidebar_swipe_hint,
-    test_page,
+    keys (
+        main_page,
+        app_name,
+        config_path,
+        quit_hint,
+        sidebar_swipe_hint,
+        test_page,
+    )
 );
 
 static LANGUAGE: AtomicU8 = AtomicU8::new(Language::En as u8);

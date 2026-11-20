@@ -6,7 +6,7 @@ use ratatui::{
 use crate::tui::{App, BG_COLOR, FG_COLOR, LIST_CHOOSEN_COLOR, PADDING};
 
 impl App {
-    pub fn text<'a>(text: &'a str) -> Paragraph<'a> {
+    pub fn text<'a, T: Into<Text<'a>>>(text: T) -> Paragraph<'a> {
         Paragraph::new(text).wrap(Wrap { trim: true })
     }
 

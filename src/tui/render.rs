@@ -41,9 +41,9 @@ impl App {
     }
 
     pub(crate) fn render(&mut self, frame: &mut Frame) {
-        let base = Self::block()
+        let base = Self::base()
             .title_top(locale().app_name_with_spaces)
-            .title_bottom(locale().quit_hint);
+            .title_bottom(locale().quit_hint_with_spaces);
         let base_inner = base.inner(frame.area());
         frame.render_widget(base, frame.area());
 

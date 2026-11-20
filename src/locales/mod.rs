@@ -10,6 +10,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{config::Config, locales::en::EN, locales::ru::RU};
 
+/// For some reason, when the field is empty is gives an error
 macro_rules! locales {
     (keys ($($key:ident),* $(,)? )) => {
         paste::paste! {
@@ -46,6 +47,7 @@ locales!(
         locales_page,
         config_saves_hint,
         preview_text,
+        preview_title,
     )
 );
 

@@ -2,7 +2,7 @@ use rat_widget::choice::Choice;
 use ratatui::{Frame, layout::{Constraint, Layout, Rect}, text::Line};
 
 use crate::{
-    locales::{Language, locale}, tui::{App, Page},
+    locales::Language, tui::{App, Page},
 };
 
 impl App {
@@ -17,8 +17,8 @@ impl App {
 
         let (choice, popup) = Choice::new()
             .items([
-                (Language::En, "First language"),
-                (Language::En, "Second language"),
+                (Language::En, "English"),
+                (Language::Ru, "Русский"),
             ])
             .into_widgets();
 

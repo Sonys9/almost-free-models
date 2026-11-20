@@ -1,5 +1,4 @@
 use crossterm::event::EventStream;
-use rat_focus::HasFocus;
 use rat_widget::{choice::ChoiceState, list::{ListState, selection::RowSelection}};
 use ratatui::{DefaultTerminal, style::Color, text::Text, widgets::Padding};
 
@@ -9,6 +8,7 @@ mod basics;
 mod pages;
 mod render;
 mod sidebar;
+mod keys;
 
 const PADDING: Padding = Padding::new(1, 1, 0, 0);
 const BG_COLOR: Color = Color::Rgb(22, 29, 36);

@@ -8,7 +8,7 @@ use std::sync::atomic::{AtomicU8, Ordering};
 
 use serde::{Deserialize, Serialize, de::Visitor};
 
-use crate::{config::Config, locales::en::EN};
+use crate::{config::Config, locales::en::EN, locales::ru::RU};
 
 macro_rules! locales {
     (keys ($($key:ident),* $(,)? )) => {
@@ -50,11 +50,13 @@ locales!(
 static LANGUAGE: AtomicU8 = AtomicU8::new(Language::En as u8);
 
 pub mod en;
+pub mod ru;
 
 #[derive(Default, Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Language {
     #[default]
     En = 0,
+    Ru = 1,
 }
 
 impl TryFrom<u8> for Language {
@@ -63,6 +65,7 @@ impl TryFrom<u8> for Language {
     fn try_from(id: u8) -> Result<Self, !> {
         Ok(match id {
             0 => Language::En,
+            1 => Language::Ru,
             _ => unreachable!(),
         })
     }
@@ -97,7 +100,8 @@ impl Language {
     /// Get locale (Locale) by language
     pub fn locale(&self) -> &'static Locale {
         match self {
-            _ => &EN,
+            Language::Ru => &RU,
+            Language::En => &EN
         }
     }
 
@@ -106,6 +110,7 @@ impl Language {
             // If the app isn't localised for some language it will
             // fallback to English (and if it's an English it will still fallback to English)
             Language::En => "en",
+            Language::Ru => "ru",
         }
     }
 

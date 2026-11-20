@@ -43,6 +43,7 @@ locales!(
         quit_hint,
         sidebar_swipe_hint,
         test_page,
+        locales_page,
     )
 );
 
@@ -76,9 +77,7 @@ impl From<&str> for Language {
 }
 
 pub fn locale() -> &'static Locale {
-    Language::try_from(LANGUAGE.load(Ordering::Relaxed))
-        .unwrap()
-        .locale()
+    Language::current().locale()
 }
 
 impl Language {
@@ -92,8 +91,7 @@ impl Language {
                 .as_str()
                 .into()
         });
-        let language_id = language as u8;
-        LANGUAGE.store(language_id, Ordering::Relaxed);
+        Self::set(language);
     }
 
     /// Get locale (Locale) by language
@@ -109,6 +107,16 @@ impl Language {
             // fallback to English (and if it's an English it will still fallback to English)
             Language::En => "en",
         }
+    }
+
+    /// Updates LANGUAGE to the new language
+    pub fn set(language: Language) {
+        LANGUAGE.store(language as u8, Ordering::Relaxed);
+    }
+
+    pub fn current() -> Language {
+        Language::try_from(LANGUAGE.load(Ordering::Relaxed))
+            .unwrap()
     }
 }
 

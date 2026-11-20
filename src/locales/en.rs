@@ -7,4 +7,5 @@ locales!(locale EN(
     quit_hint: "Ctrl + C to quit",
     config_path: "Configuration file path: ",
     test_page: "Test page",
+    locales_page: "Locales",
 ));

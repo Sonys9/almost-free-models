@@ -16,7 +16,6 @@ impl App {
         ]).split(base_inner);
 
         frame.render_widget(
-            //Self::text(concat!("Almost Free Models, v", env!("CARGO_PKG_VERSION"))),
             Self::text(format!(
                 "{}, v{}",
                 locale().app_name,

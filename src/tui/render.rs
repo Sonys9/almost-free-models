@@ -1,6 +1,6 @@
 use crossterm::event::{Event, KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
 use futures::StreamExt;
-use rat_widget::event::{HandleEvent, Outcome, Regular};
+use rat_widget::event::{ChoiceOutcome, HandleEvent, Outcome, Popup, Regular};
 use ratatui::{
     Frame,
     layout::{Constraint, Layout},
@@ -8,8 +8,7 @@ use ratatui::{
 };
 
 use crate::{
-    locales::locale,
-    tui::{App, Page},
+    locales::{Language, locale}, tui::{App, Page},
 };
 
 impl App {
@@ -31,6 +30,18 @@ impl App {
         }) = event
         {
             self.should_break = true;
+            return;
+        };
+        match self.state.locale_state.handle(&event, Popup) {
+            ChoiceOutcome::Changed => return,
+            ChoiceOutcome::Value => {
+                let new_language = self.state.locale_state.value();
+                Language::set(new_language);
+                return;
+            },
+            _ => {},
+        };
+        if self.state.locale_state.is_popup_active() {
             return;
         };
         if self.state.list_state.handle(&event, Regular) == Outcome::Changed
@@ -58,6 +69,7 @@ impl App {
         match self.state.current_page {
             Page::Main => self.main_page(frame, rest),
             Page::TestPage => self.test_page(frame, rest),
+            Page::Locales => self.locales_page(frame, rest),
         };
     }
 }

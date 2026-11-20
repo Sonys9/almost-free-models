@@ -52,7 +52,7 @@ static LANGUAGE: AtomicU8 = AtomicU8::new(Language::En as u8);
 pub mod en;
 pub mod ru;
 
-#[derive(Default, Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Default, Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Language {
     #[default]
     En = 0,
@@ -122,39 +122,5 @@ impl Language {
     pub fn current() -> Language {
         Language::try_from(LANGUAGE.load(Ordering::Relaxed))
             .unwrap()
-    }
-}
-
-struct LangVisitor;
-impl<'de> Visitor<'de> for LangVisitor {
-    type Value = Language;
-
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a string with language code")
-    }
-
-    fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
-    where
-        E: serde::de::Error,
-    {
-        Ok(v.into())
-    }
-}
-
-impl<'de> Deserialize<'de> for Language {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        deserializer.deserialize_str(LangVisitor)
-    }
-}
-
-impl Serialize for Language {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
     }
 }

@@ -15,7 +15,7 @@ impl App {
     pub(crate) async fn frame(&mut self) -> eyre::Result<()> {
         tokio::select! {
             Some(Ok(event)) = self.reader.next() => {
-                return Ok(self.key_enter(event));
+                return Ok(self.key_enter(event)?);
             }
             else => return Ok(()),
         }

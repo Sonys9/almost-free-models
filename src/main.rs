@@ -12,6 +12,7 @@ mod tui;
 async fn main() {
     prepare();
     let config = Config::load().expect("Failed to load the configuration file");
+    println!("{:?}", config);
     Language::update(&config);
 
     let mut app = App::new(config);

@@ -5,7 +5,7 @@ use tokio::{fs::{self, File, OpenOptions}, io::AsyncWriteExt};
 
 use crate::locales::Language;
 
-#[derive(Default, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Config {
     pub language: Option<Language>,
     // ...
